@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="CreativeViewPagerView">
+    <attr format="dimension" name="imagesSize"/>
+    <attr format="dimension" name="imagesMargin"/>
+    <attr format="dimension" name="contentHorizontalPadding"/>
+    <attr format="dimension" name="contentMargin"/>
+  </declare-styleable>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
+
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_above="@+id/itemCreativeNatureTitle"
+      android:background="#bfbfbf"
+      >
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@android:drawable/ic_menu_gallery"
+        />
+  </FrameLayout>
+
+  <TextView
+      android:id="@+id/itemCreativeNatureTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/itemCreativeNatureDescription"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:textSize="20sp"
+      tools:text="Title"
+      />
+
+  <TextView
+      android:id="@+id/itemCreativeNatureDescription"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="16dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      tools:text="@string/lorem_ipsum"
+      />
+</RelativeLayout>
