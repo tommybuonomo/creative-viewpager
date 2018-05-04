@@ -1,6 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.jetbrains.dokka-android'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+group = 'com.tbuonomo'
+version = '1.0.0'
 
 android {
   compileSdkVersion 27
@@ -9,7 +15,7 @@ android {
     minSdkVersion 19
     targetSdkVersion 27
     versionCode 1
-    versionName "1.0"
+    versionName version
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
@@ -32,12 +38,29 @@ dependencies {
   implementation "com.android.support:recyclerview-v7:$androidSupportVersion"
   implementation "com.android.support:palette-v7:$androidSupportVersion"
   testImplementation 'junit:junit:4.12'
-  androidTestImplementation 'com.android.support.test:runner:1.0.1'
-  androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
   implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 }
-repositories {
-  mavenCentral()
+
+dokka {
+  outputFormat = 'html'
+  outputDirectory = "$buildDir/javadoc"
 }
+
+
+buildscript {
+  ext.dokka_version = '0.9.15'
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+    classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:${dokka_version}"
+  }
+}
+
+
+apply from: 'deploy.gradle'
