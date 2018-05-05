@@ -5,7 +5,7 @@ apply from: 'keystore.gradle'
 ext {
   groupId = 'com.tbuonomo' // package name of the project
   artifactId = "creative-viewpager" // module name of the library
-  libVersion = "1.0.0"
+  libVersion = "1.0.1"
 }
 version = libVersion
 group = groupId
