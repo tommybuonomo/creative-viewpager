@@ -5,9 +5,10 @@
     android:id="@+id/itemCreativeImage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#414141"
     android:layout_marginEnd="@dimen/dimens_8dp"
     android:layout_marginStart="@dimen/dimens_8dp"
     android:scaleType="centerCrop"
+    tools:layout_height="@dimen/dimens_92dp"
+    tools:layout_width="@dimen/dimens_92dp"
     tools:src="@drawable/user_004"
     />

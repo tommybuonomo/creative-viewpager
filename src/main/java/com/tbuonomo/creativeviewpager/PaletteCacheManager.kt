@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.support.v7.graphics.Palette
 import android.util.LruCache
-import com.tbuonomo.creativeviewpager.adapter.CreativeViewAdapter
+import com.tbuonomo.creativeviewpager.adapter.CreativePagerAdapter
 import java.util.concurrent.ConcurrentHashMap
 
 class PaletteCacheManager {
@@ -18,7 +18,7 @@ class PaletteCacheManager {
   private val palettes: HashMap<String, Palette> = HashMap()
   private val runningAsyncs: ConcurrentHashMap<String, CachePalettesAsync> = ConcurrentHashMap()
 
-  private var creativeViewAdapter: CreativeViewAdapter? = null
+  private var creativePagerAdapter: CreativePagerAdapter? = null
 
   private val memoryCache: LruCache<String, Bitmap> = object : LruCache<String, Bitmap>(cacheSize) {
     override fun sizeOf(key: String?, bitmap: Bitmap?): Int {
@@ -55,7 +55,7 @@ class PaletteCacheManager {
 
   fun cachePalettesAroundPositionAsync(position: Int, onPaletteCachedListener: () -> Unit) {
     val key = getKeyByPosition(position)
-    val cachePalettesAsync = CachePalettesAsync(this, creativeViewAdapter, position, {
+    val cachePalettesAsync = CachePalettesAsync(this, creativePagerAdapter, position, {
       runningAsyncs.remove(getKeyByPosition(it))
       onPaletteCachedListener()
     })
@@ -71,7 +71,7 @@ class PaletteCacheManager {
   }
 
   private class CachePalettesAsync(val paletteCacheManager: PaletteCacheManager,
-          val creativeViewAdapter: CreativeViewAdapter?, val position: Int,
+          val creativePagerAdapter: CreativePagerAdapter?, val position: Int,
           val onPaletteCachedListener: (Int) -> Unit) : AsyncTask<Void, Void, Void>() {
     val cacheRadius = 4
     override fun doInBackground(vararg positions: Void): Void? {
@@ -82,8 +82,8 @@ class PaletteCacheManager {
         startIndex = 0
       }
 
-      if (endIndex > creativeViewAdapter?.getCount() ?: 0 - 1) {
-        endIndex = creativeViewAdapter?.getCount() ?: 0 - 1
+      if (endIndex > creativePagerAdapter?.getCount() ?: 0 - 1) {
+        endIndex = creativePagerAdapter?.getCount() ?: 0 - 1
       }
 
       for (i in startIndex until endIndex) {
@@ -92,7 +92,7 @@ class PaletteCacheManager {
         if (palette == null) {
           var bitmap = paletteCacheManager.getBitmapFromCache(key)
           if (bitmap == null) {
-            bitmap = creativeViewAdapter?.requestBitmapAtPosition(i)
+            bitmap = creativePagerAdapter?.requestBitmapAtPosition(i)
           }
 
           if (bitmap != null) {
@@ -110,7 +110,7 @@ class PaletteCacheManager {
     }
   }
 
-  fun setCreativeViewAdapter(creativeViewAdapter: CreativeViewAdapter?) {
-    this.creativeViewAdapter = creativeViewAdapter
+  fun setCreativeViewAdapter(creativePagerAdapter: CreativePagerAdapter?) {
+    this.creativePagerAdapter = creativePagerAdapter
   }
 }

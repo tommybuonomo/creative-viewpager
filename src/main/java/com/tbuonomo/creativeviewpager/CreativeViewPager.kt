@@ -13,35 +13,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
-import com.tbuonomo.creativeviewpager.adapter.CreativeViewAdapter
-import com.tbuonomo.creativeviewpager.adapter.CreativeViewContentAdapter
-import com.tbuonomo.creativeviewpager.adapter.CreativeViewImageAdapter
+import com.tbuonomo.creativeviewpager.adapter.CreativePagerAdapter
+import com.tbuonomo.creativeviewpager.adapter.CreativeContentAdapter
+import com.tbuonomo.creativeviewpager.adapter.CreativeHeaderAdapter
 import com.tbuonomo.creativeviewpager.transformer.CreativeContentPageTransformer
-import kotlinx.android.synthetic.main.layout_creative_view_pager.view.creativeImageRecycler
+import kotlinx.android.synthetic.main.layout_creative_view_pager.view.creativeContentViewPager
+import kotlinx.android.synthetic.main.layout_creative_view_pager.view.creativeHeaderRecycler
 import kotlinx.android.synthetic.main.layout_creative_view_pager.view.creativeRoot
-import kotlinx.android.synthetic.main.layout_creative_view_pager.view.creativeViewPagerCenter
-import kotlinx.android.synthetic.main.layout_creative_view_pager.view.imageVerticalGuideline
+import kotlinx.android.synthetic.main.layout_creative_view_pager.view.headerGuideline
 import kotlinx.android.synthetic.main.layout_creative_view_pager_edit_mode.view.editModeContentLayout
-import kotlinx.android.synthetic.main.layout_creative_view_pager_edit_mode.view.editModeImagesLayout
+import kotlinx.android.synthetic.main.layout_creative_view_pager_edit_mode.view.editModeHeaderLayout
 
-class CreativeViewPagerView : FrameLayout {
+class CreativeViewPager : FrameLayout {
   companion object {
     const val SCALE_MIN = 0.35f
     const val SCALE_MAX = 1.0f
   }
 
-  private var imagesMargin = resources.getDimension(R.dimen.dimens_8dp)
-  private var contentMargin = resources.getDimension(R.dimen.dimens_4dp)
+  private var headerItemMargin = resources.getDimension(R.dimen.dimens_8dp)
+  private var contentItemMargin = resources.getDimension(R.dimen.dimens_4dp)
   private var contentHorizontalPadding = resources.getDimension(R.dimen.dimens_32dp)
-  private var imagesSize = resources.getDimension(R.dimen.dimens_92dp)
+  private var headerItemSize = resources.getDimension(R.dimen.dimens_92dp)
 
-  private lateinit var creativeImageAdapter: CreativeViewImageAdapter
-  private lateinit var creativeContentAdapter: CreativeViewContentAdapter
+  private lateinit var creativeImageAdapter: CreativeHeaderAdapter
+  private lateinit var creativeContentAdapter: CreativeContentAdapter
 
   private var paletteCacheManager: PaletteCacheManager = PaletteCacheManager()
   private val argbEvaluator: ArgbEvaluator = ArgbEvaluator()
 
-  private var creativeViewAdapter: CreativeViewAdapter? = null
+  private var creativePagerAdapter: CreativePagerAdapter? = null
 
   constructor(context: Context?) : super(context) {
     init(null)
@@ -66,20 +66,21 @@ class CreativeViewPagerView : FrameLayout {
     }
 
     View.inflate(context, R.layout.layout_creative_view_pager, this)
-    setUpImages()
+    setUpHeader()
     setUpContent()
   }
 
   private fun readAttributes(attrs: AttributeSet?) {
     if (attrs != null) {
-      val ta: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.CreativeViewPagerView)
+      val ta: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.CreativeViewPager)
 
-      imagesSize = ta.getDimension(R.styleable.CreativeViewPagerView_imagesSize, imagesSize)
-      imagesMargin = ta.getDimension(R.styleable.CreativeViewPagerView_imagesMargin, imagesMargin)
-      contentMargin = ta.getDimension(R.styleable.CreativeViewPagerView_contentMargin,
-              contentMargin)
+      headerItemSize = ta.getDimension(R.styleable.CreativeViewPager_headerItemSize, headerItemSize)
+      headerItemMargin = ta.getDimension(R.styleable.CreativeViewPager_headerItemMargin,
+              headerItemMargin)
+      contentItemMargin = ta.getDimension(R.styleable.CreativeViewPager_contentItemMargin,
+              contentItemMargin)
       contentHorizontalPadding = ta.getDimension(
-              R.styleable.CreativeViewPagerView_contentHorizontalPadding,
+              R.styleable.CreativeViewPager_contentHorizontalPadding,
               contentHorizontalPadding)
       ta.recycle()
     }
@@ -88,99 +89,77 @@ class CreativeViewPagerView : FrameLayout {
   private fun setUpEditMode() {
     View.inflate(context, R.layout.layout_creative_view_pager_edit_mode, this)
 
-    val contentView = LayoutInflater.from(context).inflate(
+    val contentItem = LayoutInflater.from(context).inflate(
             R.layout.item_creative_content_placeholder, editModeContentLayout, false)
     editModeContentLayout.setPadding(contentHorizontalPadding.toInt(), 0,
             contentHorizontalPadding.toInt(), 0)
-    editModeContentLayout.addView(contentView, LayoutParams(MATCH_PARENT, MATCH_PARENT))
+    editModeContentLayout.addView(contentItem, LayoutParams(MATCH_PARENT, MATCH_PARENT))
 
     for (i in 0..10) {
-      val imageView = LayoutInflater.from(context).inflate(R.layout.item_creative_image_placeholder,
-              editModeImagesLayout,
+      val headerItem = LayoutInflater.from(context).inflate(
+              R.layout.item_creative_header_placeholder,
+              editModeHeaderLayout,
               false)
-      val marginLayoutParams = MarginLayoutParams(imagesSize.toInt(), imagesSize.toInt())
-      val layoutParams = imageVerticalGuideline.layoutParams as ConstraintLayout.LayoutParams
+      val marginLayoutParams = MarginLayoutParams(headerItemSize.toInt(), headerItemSize.toInt())
+      val layoutParams = headerGuideline.layoutParams as ConstraintLayout.LayoutParams
       val parentMargin = layoutParams.guidePercent * context.resources.displayMetrics.widthPixels
       if (i == 0) {
-        marginLayoutParams.marginStart = (parentMargin - imagesSize / 2).toInt()
+        marginLayoutParams.marginStart = (parentMargin - headerItemSize / 2).toInt()
       } else {
-        marginLayoutParams.marginStart = imagesMargin.toInt()
-        marginLayoutParams.marginEnd = imagesMargin.toInt()
-        marginLayoutParams.width = (imagesSize * SCALE_MIN).toInt()
-        marginLayoutParams.height = (imagesSize * SCALE_MIN).toInt()
+        marginLayoutParams.marginStart = headerItemMargin.toInt()
+        marginLayoutParams.marginEnd = headerItemMargin.toInt()
+        marginLayoutParams.width = (headerItemSize * SCALE_MIN).toInt()
+        marginLayoutParams.height = (headerItemSize * SCALE_MIN).toInt()
       }
 
-      editModeImagesLayout.addView(imageView, marginLayoutParams)
+      editModeHeaderLayout.addView(headerItem, marginLayoutParams)
     }
   }
 
   private fun setUpContent() {
     // Contents
-    creativeContentAdapter = CreativeViewContentAdapter(this, contentMargin,
+    creativeContentAdapter = CreativeContentAdapter(this, contentItemMargin,
             contentHorizontalPadding)
-    creativeViewPagerCenter.setPageTransformer(false,
+    creativeContentViewPager.setPageTransformer(false,
             CreativeContentPageTransformer(contentHorizontalPadding))
-    creativeViewPagerCenter.pageMargin = contentMargin.toInt()
-    creativeViewPagerCenter.addOnPageChangeListener(OnContentPageChangeListener())
+    creativeContentViewPager.pageMargin = contentItemMargin.toInt()
+    creativeContentViewPager.addOnPageChangeListener(OnContentPageChangeListener())
   }
 
-  private fun setUpImages() {
+  private fun setUpHeader() {
     // Create adapter for images
-    creativeImageAdapter = CreativeViewImageAdapter(this, imageVerticalGuideline, imagesSize,
-            imagesMargin, {
-      creativeViewPagerCenter.setCurrentItem(it, true)
+    creativeImageAdapter = CreativeHeaderAdapter(this, headerGuideline, headerItemSize,
+            headerItemMargin, {
+      creativeContentViewPager.setCurrentItem(it, true)
     })
-    creativeImageRecycler.layoutParams.height = (imagesSize + resources.getDimension(
+    creativeHeaderRecycler.layoutParams.height = (headerItemSize + resources.getDimension(
             R.dimen.dimens_16dp) * 2).toInt()
-    creativeImageRecycler.recycledViewPool.setMaxRecycledViews(0, 0)
+    creativeHeaderRecycler.recycledViewPool.setMaxRecycledViews(0, 0)
 
     // Delegate onTouch to the content view pager
-    creativeImageRecycler.setOnTouchListener { _, event ->
-      creativeViewPagerCenter.onTouchEvent(event)
+    creativeHeaderRecycler.setOnTouchListener { _, event ->
+      creativeContentViewPager.onTouchEvent(event)
       true
     }
   }
 
-  fun setCreativeViewPagerAdapter(creativeViewAdapter: CreativeViewAdapter) {
-    post({
-      this.creativeViewAdapter = creativeViewAdapter
-      // Setup adapter for palette manager
-      paletteCacheManager.setCreativeViewAdapter(creativeViewAdapter)
-      paletteCacheManager.cachePalettesAroundPositionAsync(0, {
-        refreshBackgroundColor(0, 0f)
-      })
-
-      // Setup image adapter
-      creativeImageAdapter.creativeViewAdapter = creativeViewAdapter
-      creativeImageRecycler.layoutManager = LinearLayoutManager(context,
-              LinearLayoutManager.HORIZONTAL, false)
-      creativeImageRecycler.adapter = creativeImageAdapter
-
-      // Setup content adapter
-      creativeContentAdapter.creativeViewAdapter = creativeViewAdapter
-      creativeViewPagerCenter.adapter = creativeContentAdapter
-
-      creativeImageRecycler.post({ refreshImagesPosition(0f, 0) })
-    })
-  }
-
   private fun refreshImagesSize() {
-    for (i in 0 until creativeImageRecycler.childCount) {
-      val itemView = creativeImageRecycler.getChildAt(i)
+    for (i in 0 until creativeHeaderRecycler.childCount) {
+      val itemView = creativeHeaderRecycler.getChildAt(i)
 
       val centerX = itemView.x + itemView.width.toFloat() / 2
-      val diffX = Math.abs(imageVerticalGuideline.x - centerX)
-      val maxScaleDistance = imagesSize - imagesMargin * 2
+      val diffX = Math.abs(headerGuideline.x - centerX)
+      val maxScaleDistance = headerItemSize - headerItemMargin * 2
       val scale = if (diffX < maxScaleDistance) SCALE_MAX - diffX / maxScaleDistance * (SCALE_MAX - SCALE_MIN) else SCALE_MIN
-      itemView.size = (imagesSize * scale).toInt()
+      itemView.size = (headerItemSize * scale).toInt()
     }
-    creativeImageRecycler.requestLayout()
+    creativeHeaderRecycler.requestLayout()
   }
 
   private fun refreshImagesPosition(positionOffset: Float, position: Int) {
-    val linearLayoutManager = creativeImageRecycler.layoutManager as LinearLayoutManager
+    val linearLayoutManager = creativeHeaderRecycler.layoutManager as LinearLayoutManager
 
-    val distanceBetweenImages = (imagesSize * SCALE_MIN + imagesMargin * 2).toInt()
+    val distanceBetweenImages = (headerItemSize * SCALE_MIN + headerItemMargin * 2).toInt()
     val imageOffsetPixels = positionOffset * distanceBetweenImages
 
     val scrollOffsetPixels = (-(position * distanceBetweenImages + imageOffsetPixels)).toInt()
@@ -189,7 +168,7 @@ class CreativeViewPagerView : FrameLayout {
             scrollOffsetPixels)
   }
 
-  inner class OnContentPageChangeListener : OnPageChangeListener {
+  private inner class OnContentPageChangeListener : OnPageChangeListener {
     override fun onPageScrollStateChanged(state: Int) {
     }
 
@@ -205,11 +184,11 @@ class CreativeViewPagerView : FrameLayout {
   }
 
   private fun refreshBackgroundColor(position: Int, positionOffset: Float) {
-    if (creativeViewAdapter?.isUpdatingBackgroundColor() == true) {
+    if (creativePagerAdapter?.isUpdatingBackgroundColor() == true) {
 
       // Retrieve palettes from cache
-      var startPalette = paletteCacheManager.getPaletteForPosition(position)
-      var endPalette = paletteCacheManager.getPaletteForPosition(position + 1)
+      val startPalette = paletteCacheManager.getPaletteForPosition(position)
+      val endPalette = paletteCacheManager.getPaletteForPosition(position + 1)
 
       var startTopColor = Color.TRANSPARENT
       var startBottomColor = Color.TRANSPARENT
@@ -240,6 +219,33 @@ class CreativeViewPagerView : FrameLayout {
 
       (creativeRoot.background as GradientDrawable).colors = intArrayOf(topColor, bottomColor)
     }
+  }
+
+  fun setCreativeViewPagerAdapter(creativePagerAdapter: CreativePagerAdapter) {
+    post({
+      this.creativePagerAdapter = creativePagerAdapter
+      // Setup adapter for palette manager
+      paletteCacheManager.setCreativeViewAdapter(creativePagerAdapter)
+      paletteCacheManager.cachePalettesAroundPositionAsync(0, {
+        refreshBackgroundColor(0, 0f)
+      })
+
+      // Setup image adapter
+      creativeImageAdapter.creativePagerAdapter = creativePagerAdapter
+      creativeHeaderRecycler.layoutManager = LinearLayoutManager(context,
+              LinearLayoutManager.HORIZONTAL, false)
+      creativeHeaderRecycler.adapter = creativeImageAdapter
+
+      // Setup content adapter
+      creativeContentAdapter.creativePagerAdapter = creativePagerAdapter
+      creativeContentViewPager.adapter = creativeContentAdapter
+
+      creativeHeaderRecycler.post({ refreshImagesPosition(0f, 0) })
+    })
+  }
+
+  fun setCurrentItem(position: Int) {
+    creativeContentViewPager.setCurrentItem(position, true)
   }
 
   private var View.size: Int

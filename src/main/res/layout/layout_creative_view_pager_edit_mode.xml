@@ -12,10 +12,10 @@
       android:id="@+id/creativeTopSpace"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      app:layout_constraintBottom_toBottomOf="@+id/editModeImagesLayout"
+      app:layout_constraintBottom_toBottomOf="@+id/editModeHeaderLayout"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/editModeImagesLayout"
+      app:layout_constraintTop_toTopOf="@+id/editModeHeaderLayout"
       />
 
   <FrameLayout
@@ -32,7 +32,7 @@
   </FrameLayout>
 
   <LinearLayout
-      android:id="@+id/editModeImagesLayout"
+      android:id="@+id/editModeHeaderLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
@@ -51,7 +51,7 @@
       app:layout_constraintGuide_percent="0.25"
       />
   <android.support.constraint.Guideline
-      android:id="@+id/imageVerticalGuideline"
+      android:id="@+id/headerGuideline"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="vertical"

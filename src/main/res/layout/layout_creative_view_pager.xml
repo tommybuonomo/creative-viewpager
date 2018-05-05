@@ -12,15 +12,15 @@
       android:id="@+id/creativeTopSpace"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      app:layout_constraintBottom_toBottomOf="@+id/creativeImageRecycler"
+      app:layout_constraintBottom_toBottomOf="@+id/creativeHeaderRecycler"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/creativeImageRecycler"
+      app:layout_constraintTop_toTopOf="@+id/creativeHeaderRecycler"
       app:layout_constraintVertical_bias="0.40"
       />
 
   <android.support.v4.view.ViewPager
-      android:id="@+id/creativeViewPagerCenter"
+      android:id="@+id/creativeContentViewPager"
       android:layout_width="match_parent"
       android:layout_height="0dp"
       android:layout_marginBottom="16dp"
@@ -33,7 +33,7 @@
   </android.support.v4.view.ViewPager>
 
   <android.support.v7.widget.RecyclerView
-      android:id="@+id/creativeImageRecycler"
+      android:id="@+id/creativeHeaderRecycler"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dimens_124dp"
       android:clipToPadding="false"
@@ -54,7 +54,7 @@
       app:layout_constraintGuide_percent="0.25"
       />
   <android.support.constraint.Guideline
-      android:id="@+id/imageVerticalGuideline"
+      android:id="@+id/headerGuideline"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="vertical"

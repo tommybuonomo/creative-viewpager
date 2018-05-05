@@ -6,11 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 
-interface CreativeViewAdapter {
-  fun bindContentLayoutAt(inflater: LayoutInflater, container: ViewGroup,
+interface CreativePagerAdapter {
+  /**
+   * Method to override in child adapter to instantiate and bind header item at position [position].
+   */
+  fun instantiateHeaderItem(inflater: LayoutInflater, container: ViewGroup,
           position: Int): View
 
-  fun bindProfileLayoutAt(inflater: LayoutInflater,
+  /**
+   * Method to override in child adapter to instantiate and bind content item at position [position].
+   */
+  fun instantiateContentItem(inflater: LayoutInflater,
           container: ViewGroup, position: Int): View
 
   /**

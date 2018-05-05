@@ -8,17 +8,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
-import com.tbuonomo.creativeviewpager.CreativeViewPagerView.Companion.SCALE_MIN
+import com.tbuonomo.creativeviewpager.CreativeViewPager.Companion.SCALE_MIN
 import com.tbuonomo.creativeviewpager.R
-import com.tbuonomo.creativeviewpager.adapter.CreativeViewImageAdapter.PagerImageViewHolder
+import com.tbuonomo.creativeviewpager.adapter.CreativeHeaderAdapter.PagerImageViewHolder
 
-class CreativeViewImageAdapter(val parent: ViewGroup,
+class CreativeHeaderAdapter(val parent: ViewGroup,
         private val verticalGuideline: Guideline,
         private val imagesSize: Float, private val imagesMargin: Float,
         private val onImageClick: ((Int) -> Unit)) :
         Adapter<PagerImageViewHolder>() {
 
-  var creativeViewAdapter: CreativeViewAdapter? = null
+  var creativePagerAdapter: CreativePagerAdapter? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerImageViewHolder {
     val inflater = LayoutInflater.from(parent.context)
@@ -29,12 +29,12 @@ class CreativeViewImageAdapter(val parent: ViewGroup,
   }
 
   override fun getItemCount(): Int {
-    return creativeViewAdapter?.getCount() ?: 0
+    return creativePagerAdapter?.getCount() ?: 0
   }
 
   override fun onBindViewHolder(holder: PagerImageViewHolder, position: Int) {
     val container = holder.itemView as ViewGroup
-    val profileRootView = creativeViewAdapter?.bindProfileLayoutAt(
+    val profileRootView = creativePagerAdapter?.instantiateContentItem(
             LayoutInflater.from(holder.itemView.context), container, position)
     container.removeAllViews()
     container.addView(profileRootView)

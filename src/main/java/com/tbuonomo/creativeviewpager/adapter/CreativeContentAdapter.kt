@@ -8,18 +8,18 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.MarginLayoutParams
 import com.tbuonomo.creativeviewpager.R
 
-class CreativeViewContentAdapter(private val parent: View,
+class CreativeContentAdapter(private val parent: View,
         private val contentMargin: Float,
         private val contentWidthPadding: Float) :
         PagerAdapter() {
 
-  lateinit var creativeViewAdapter: CreativeViewAdapter
+  lateinit var creativePagerAdapter: CreativePagerAdapter
 
   override fun instantiateItem(container: ViewGroup, position: Int): View {
     val inflater = LayoutInflater.from(container.context)
     val wrapper = inflater.inflate(R.layout.item_creative_content, container, false) as ViewGroup
 
-    val view = creativeViewAdapter.bindContentLayoutAt(
+    val view = creativePagerAdapter.instantiateHeaderItem(
             inflater,
             wrapper, position)
 
@@ -36,7 +36,7 @@ class CreativeViewContentAdapter(private val parent: View,
     return view == `object`
   }
 
-  override fun getCount() = creativeViewAdapter.getCount()
+  override fun getCount() = creativePagerAdapter.getCount()
 
   override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
     container.removeView(`object` as View)
