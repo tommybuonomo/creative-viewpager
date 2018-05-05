@@ -5,9 +5,6 @@ apply plugin: 'org.jetbrains.dokka-android'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
 
-group = 'com.tbuonomo'
-version = '1.0.0'
-
 android {
   compileSdkVersion 27
 
