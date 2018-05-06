@@ -43,7 +43,7 @@ Create your own adapter extending `CreativeViewAdapter`
 class NatureCreativeViewAdapter(val context: Context) : CreativeViewAdapter
 ```
 
-By default, you have to override the 3 methods `bindContentLayoutAt`, `bindProfileLayoutAt` and `getCount`.
+By default, you have to override the 3 methods `instantiateHeaderItem`, `instantiateContentItem` and `getCount`.
 
 ```Kotlin
     override fun instantiateHeaderItem(inflater: LayoutInflater, container: ViewGroup, position: Int): View {
