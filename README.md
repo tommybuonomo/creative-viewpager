@@ -15,7 +15,7 @@ dependencies {
 ## Usage
 
 ### In your XML layout
-Add `CreativeViewPagerView` in your activity's layout
+Add `CreativeViewPager` in your activity's layout
 ```Xml
 <com.tbuonomo.creativeviewpager.CreativeViewPager
     android:id="@+id/creativeViewPagerView"
@@ -40,7 +40,7 @@ You will see a fake preview in Android Studio of the creative view.
 ### Adapter
 Create your own adapter extending `CreativeViewAdapter`
 ```Kotlin
-class NatureCreativeViewAdapter(val context: Context) : CreativeViewAdapter
+class NatureCreativePagerAdapter(val context: Context) : CreativePagerAdapter
 ```
 
 By default, you have to override the 3 methods `instantiateHeaderItem`, `instantiateContentItem` and `getCount`.
