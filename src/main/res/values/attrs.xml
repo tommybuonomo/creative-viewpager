@@ -2,6 +2,7 @@
 <resources>
   <declare-styleable name="CreativeViewPager">
     <attr format="dimension" name="headerItemSize"/>
+    <attr format="dimension" name="contentHeight"/>
     <attr format="dimension" name="headerItemMargin"/>
     <attr format="dimension" name="contentHorizontalPadding"/>
     <attr format="dimension" name="contentItemMargin"/>

@@ -34,6 +34,7 @@ class CreativeViewPager : FrameLayout {
   private var contentItemMargin = resources.getDimension(R.dimen.dimens_4dp)
   private var contentHorizontalPadding = resources.getDimension(R.dimen.dimens_32dp)
   private var headerItemSize = resources.getDimension(R.dimen.dimens_92dp)
+  private var contentHeight = -1f
 
   private lateinit var creativeImageAdapter: CreativeHeaderAdapter
   private lateinit var creativeContentAdapter: CreativeContentAdapter
@@ -75,6 +76,7 @@ class CreativeViewPager : FrameLayout {
       val ta: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.CreativeViewPager)
 
       headerItemSize = ta.getDimension(R.styleable.CreativeViewPager_headerItemSize, headerItemSize)
+      contentHeight = ta.getDimension(R.styleable.CreativeViewPager_contentHeight, contentHeight)
       headerItemMargin = ta.getDimension(R.styleable.CreativeViewPager_headerItemMargin,
               headerItemMargin)
       contentItemMargin = ta.getDimension(R.styleable.CreativeViewPager_contentItemMargin,
@@ -120,6 +122,10 @@ class CreativeViewPager : FrameLayout {
     // Contents
     creativeContentAdapter = CreativeContentAdapter(this, contentItemMargin,
             contentHorizontalPadding)
+    if (contentHeight != -1f) {
+      creativeContentViewPager.layoutParams.height = contentHeight.toInt()
+      creativeContentViewPager.requestLayout()
+    }
     creativeContentViewPager.setPageTransformer(false,
             CreativeContentPageTransformer(contentHorizontalPadding))
     creativeContentViewPager.pageMargin = contentItemMargin.toInt()
