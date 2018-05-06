@@ -3,7 +3,7 @@
 Creative View Pager easy to use !
 This view pager library combines a header list which is scrolling automatically in coordination with the page contents.
 
-![CreativeViewPager](/art/creative-viewpager0.gif)
+![CreativeViewPager](/art/creative-viewpager1.gif)
 
 ## Download
 ```Gradle
