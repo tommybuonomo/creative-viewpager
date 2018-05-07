@@ -93,6 +93,9 @@ class CreativeViewPager : FrameLayout {
 
     val contentItem = LayoutInflater.from(context).inflate(
             R.layout.item_creative_content_placeholder, editModeContentLayout, false)
+    if (contentHeight != -1f) {
+      editModeContentLayout.layoutParams.height = contentHeight.toInt()
+    }
     editModeContentLayout.setPadding(contentHorizontalPadding.toInt(), 0,
             contentHorizontalPadding.toInt(), 0)
     editModeContentLayout.addView(contentItem, LayoutParams(MATCH_PARENT, MATCH_PARENT))
