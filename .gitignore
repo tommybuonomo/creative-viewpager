@@ -39,4 +39,4 @@ local.properties
 *.iml
 
 # Bintray
-keystore.gradle
+/*/keystore.properties

@@ -1,6 +1,5 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-apply from: 'keystore.gradle'
 
 ext {
   groupId = 'com.tbuonomo' // package name of the project
@@ -10,9 +9,15 @@ ext {
 version = libVersion
 group = groupId
 
+def propsFile = rootProject.file('keystore.properties')
+
 bintray {
+  if (propsFile.exists()) {
+    def props = new Properties()
+    props.load(new FileInputStream(propsFile))
+    key = file(props['bintrayKey'])
+  }
   user = 'tbuonomo'
-  key = bintray_key
   configurations = ['archives']
   publish = true //[Default: false] Whether version should be auto published after an upload
   override = false //[Default: false] Whether to override version artifacts already published
