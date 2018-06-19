@@ -10,8 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.tbuonomo.creativeviewpager.adapter.CreativePagerAdapter
-import com.tbuonomo.tbd.R
-import com.tbuonomo.tbd.presentation.adapter.item.NatureItem
+
 
 class NatureCreativePagerAdapter(val context: Context) : CreativePagerAdapter {
 
@@ -25,7 +24,7 @@ class NatureCreativePagerAdapter(val context: Context) : CreativePagerAdapter {
     val image: ImageView = headerRoot.findViewById(R.id.itemCreativeNatureImage)
 
     title.text = context.getString(R.string.item_nature_title, position)
-    image.setImageDrawable(context.getDrawable(NatureItem.values()[position].natureDrawable))
+    image.setImageDrawable(ContextCompat.getDrawable(context, NatureItem.values()[position].natureDrawable))
 
     return headerRoot
   }

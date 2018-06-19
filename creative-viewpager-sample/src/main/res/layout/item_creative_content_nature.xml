@@ -49,7 +49,6 @@
             android:layout_marginTop="8dp"
             android:textSize="20sp"
             tools:text="Nature"
-            style="@style/BoldFont"
             />
 
         <TextView
@@ -61,7 +60,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="@string/lorem_ipsum"
-            style="@style/SemiBoldFont"
             />
       </LinearLayout>
     </ScrollView>

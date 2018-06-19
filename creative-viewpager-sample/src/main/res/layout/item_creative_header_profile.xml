@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<de.hdodenhof.circleimageview.CircleImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemCreativeImage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scaleType="centerCrop"
+    app:civ_border_color="@color/md_white_1000"
+    app:civ_border_width="2dp"
+    tools:layout_height="92dp"
+    tools:layout_width="92dp"
+    tools:src="@drawable/user_000"
+    />
