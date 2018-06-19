@@ -1,0 +1,4 @@
+<resources>
+  <string name="app_name">creative-viewpager-sample</string>
+  <string name="item_nature_title">Nature %d</string>
+</resources>
